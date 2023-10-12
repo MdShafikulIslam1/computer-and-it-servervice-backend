@@ -12,8 +12,6 @@ datasource db {
 
 model User {
   id            String         @id @default(uuid())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
   email         String         @unique
   password      String
   role          String         @default("user")
@@ -21,14 +19,14 @@ model User {
   profile       Profile?
   reviewRatings ReviewRating[]
   feedbacks     Feedback[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@map("user")
 }
 
 model Profile {
   id                 String   @id @default(uuid())
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
   address            String
   contactNo          String
   emergencyContactNo String?
@@ -36,48 +34,53 @@ model Profile {
   profileImage       String?
   userId             String   @unique
   user               User     @relation(fields: [userId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("profile")
 }
 
 model Category {
   id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
   title     String    @unique
   services  Service[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("category")
 }
 
 model Service {
-  id                String         @id @default(uuid())
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  id String @id @default(uuid())
+
   name              String         @unique
   description       String
   categoryId        String
   category          Category       @relation(fields: [categoryId], references: [id])
   status            String         @default("UPCOMING")
-  warranty          String?
+  warranty          Float?
   imageUrl          String?
+  durationInMinutes Int            @default(0)
   takenBookingCount Int            @default(0)
   fee               Float          @default(0)
   reviewRatings     ReviewRating[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
   @@map("services")
 }
 
 model ReviewRating {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id String @id @default(uuid())
+
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   serviceId String
   service   Service  @relation(fields: [serviceId], references: [id])
-  rating    Int      @default(0)
+  rating    Float    @default(0)
   comments  String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("review_rating")
 }
@@ -95,7 +98,7 @@ model Feedback {
 enum Service_status {
   UPCOMING
   AVAILABLE
-  BOOKED
+  NOT_AVAILABLE
 }
 
 enum User_role {
