@@ -4,4 +4,5 @@ export type IUserFilterableFields = {
   email?: string;
   contactNo?: string;
   gender?: string;
+  role?: string;
 };

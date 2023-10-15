@@ -3,21 +3,21 @@ import { paginationHelpers } from '../../../helpers/paginationHelpers';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/paginationOptions';
 import prisma from '../../../shared/prisma';
-import { Service, Prisma } from '@prisma/client';
-import { IServiceFilterableFields } from './service.interface';
-import { serviceSearchableFields } from './service.constant';
+import { ReviewRating, Prisma } from '@prisma/client';
+import { IReviewFilterableFields } from './review.interface';
+import { reviewSearchableFields } from './review.constant';
 
-const create = async (payload: Service): Promise<Service> => {
-  const result = await prisma.service.create({
+const create = async (payload: ReviewRating): Promise<ReviewRating> => {
+  const result = await prisma.reviewRating.create({
     data: payload,
   });
   return result;
 };
 
 const getAll = async (
-  filters: IServiceFilterableFields,
+  filters: IReviewFilterableFields,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<Service[]>> => {
+): Promise<IGenericResponse<ReviewRating[]>> => {
   const { searchTerm, ...filterData } = filters;
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
@@ -33,7 +33,7 @@ const getAll = async (
   // searching;
   if (searchTerm) {
     andConditions.push({
-      OR: serviceSearchableFields.map(field => ({
+      OR: reviewSearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
@@ -52,20 +52,20 @@ const getAll = async (
       })),
     });
   }
-  const whereConditions: Prisma.ServiceWhereInput =
+  const whereConditions: Prisma.ReviewRatingWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  const result = await prisma.service.findMany({
+  const result = await prisma.reviewRating.findMany({
     where: whereConditions,
     include: {
-      category: true,
-      reviewRatings: true,
+      user: true,
+      service: true,
     },
     orderBy,
     skip,
     take: limit,
   });
-  const total = await prisma.service.count({
+  const total = await prisma.reviewRating.count({
     where: whereConditions,
   });
   return {
@@ -78,20 +78,17 @@ const getAll = async (
   };
 };
 
-const getSingle = async (id: string): Promise<Service | null> => {
-  const result = await prisma.service.findUnique({
+const getSingle = async (id: string): Promise<ReviewRating | null> => {
+  const result = await prisma.reviewRating.findUnique({
     where: {
       id,
-    },
-    include: {
-      category: true,
     },
   });
   return result;
 };
 
-const deleteOne = async (id: string): Promise<Service | null> => {
-  const result = await prisma.service.delete({
+const deleteOne = async (id: string): Promise<ReviewRating | null> => {
+  const result = await prisma.reviewRating.delete({
     where: {
       id,
     },
@@ -100,9 +97,9 @@ const deleteOne = async (id: string): Promise<Service | null> => {
 };
 const updateOne = async (
   id: string,
-  data: Partial<Service>
-): Promise<Service | null> => {
-  const result = await prisma.service.update({
+  data: Partial<ReviewRating>
+): Promise<ReviewRating | null> => {
+  const result = await prisma.reviewRating.update({
     where: {
       id,
     },
@@ -110,7 +107,7 @@ const updateOne = async (
   });
   return result;
 };
-export const ServicesItemService = {
+export const ReviewService = {
   create,
   getAll,
   getSingle,

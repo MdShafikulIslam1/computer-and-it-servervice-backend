@@ -4,5 +4,12 @@ export const userFilterableFields = [
   'email',
   'contactNo',
   'gender',
+  'role',
 ];
-export const userSearchableFields = ['name', 'email', 'contactNo', 'gender'];
+export const userSearchableFields = [
+  'name',
+  'email',
+  'contactNo',
+  'gender',
+  'role',
+];

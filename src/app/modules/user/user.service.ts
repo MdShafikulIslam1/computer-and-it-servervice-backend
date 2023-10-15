@@ -79,10 +79,10 @@ const getAll = async (
   };
 };
 
-const getSingle = async (id: string): Promise<User | null> => {
-  const result = await prisma.user.findUnique({
+const getSingle = async (email: string): Promise<User | null> => {
+  const result = await prisma.user.findFirst({
     where: {
-      id,
+      email,
     },
   });
   return result;

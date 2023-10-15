@@ -11,33 +11,24 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  password      String
-  role          String         @default("user")
-  name          String
-  profile       Profile?
-  reviewRatings ReviewRating[]
-  feedbacks     Feedback[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  @@map("user")
-}
-
-model Profile {
-  id                 String   @id @default(uuid())
-  address            String
-  contactNo          String
+  id                 String         @id @default(uuid())
+  email              String         @unique
+  password           String
+  role               String         @default("user")
+  name               String
+  address            String?
+  contactNo          String?
   emergencyContactNo String?
   dateOfBirth        String?
   profileImage       String?
-  userId             String   @unique
-  user               User     @relation(fields: [userId], references: [id])
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  availability       Boolean        @default(false)
+  nationality        String?
+  reviewRatings      ReviewRating[]
+  feedbacks          Feedback[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 
-  @@map("profile")
+  @@map("user")
 }
 
 model Category {
@@ -72,13 +63,12 @@ model Service {
 
 model ReviewRating {
   id String @id @default(uuid())
-
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   serviceId String
   service   Service  @relation(fields: [serviceId], references: [id])
   rating    Float    @default(0)
-  comments  String[]
+  comments  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
