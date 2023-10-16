@@ -14,7 +14,7 @@ model User {
   id                 String         @id @default(uuid())
   email              String         @unique
   password           String
-  role               String         @default("user")
+  role               User_role         @default(user)
   name               String
   address            String?
   contactNo          String?
@@ -49,7 +49,7 @@ model Service {
   description       String
   categoryId        String
   category          Category       @relation(fields: [categoryId], references: [id])
-  status            String         @default("UPCOMING")
+  status            Service_status         @default(UPCOMING)
   warranty          Float?
   imageUrl          String?
   durationInMinutes Int            @default(0)
@@ -75,6 +75,23 @@ model Cart {
   updatedAt DateTime? @updatedAt
 
   @@map("cart")
+}
+
+model Booking {
+  id                 String         @id @default(uuid())
+  name               String
+  address            String
+  email              String
+  contactNo          String
+  emergencyContactNo String
+  additionalInfo     String?
+  price              Float?
+  status             Booking_status @default(PENDING)
+  bookingItems       Json[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime?      @updatedAt
+
+  @@map("booking")
 }
 
 model ReviewRating {
@@ -111,4 +128,11 @@ enum User_role {
   user
   admin
   super_admin
+}
+
+enum Booking_status {
+  PENDING
+  ACCEPT
+  REJECT
+  CANCEL
 }
