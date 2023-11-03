@@ -14,7 +14,7 @@ model User {
   id                 String         @id @default(uuid())
   email              String         @unique
   password           String
-  role               User_role         @default(user)
+  role               User_role      @default(user)
   name               String
   address            String?
   contactNo          String?
@@ -28,28 +28,30 @@ model User {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   cart               Cart[]
+  bookings           Booking[]
 
   @@map("user")
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  title     String    @unique
-  services  Service[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String    @id @default(uuid())
+  title       String    @unique
+  description String
+  logo        String
+  services    Service[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@map("category")
 }
 
 model Service {
-  id String @id @default(uuid())
-
+  id                String         @id @default(uuid())
   name              String         @unique
   description       String
   categoryId        String
   category          Category       @relation(fields: [categoryId], references: [id])
-  status            Service_status         @default(UPCOMING)
+  status            Service_status @default(UPCOMING)
   warranty          Float?
   imageUrl          String?
   durationInMinutes Int            @default(0)
@@ -79,10 +81,9 @@ model Cart {
 
 model Booking {
   id                 String         @id @default(uuid())
-  name               String
+  userId             String
+  user               User           @relation(fields: [userId], references: [id])
   address            String
-  email              String
-  contactNo          String
   emergencyContactNo String
   additionalInfo     String?
   price              Float?
@@ -109,11 +110,16 @@ model ReviewRating {
 }
 
 model Feedback {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  id               String   @id @default(uuid())
+  name             String
+  email            String
+  contactNo        String
+  feedbackComments String
+  isResolved       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  User             User?    @relation(fields: [userId], references: [id])
+  userId           String?
 
   @@map("feedback")
 }

@@ -6,7 +6,15 @@ import prisma from '../../../shared/prisma';
 import { Booking, Prisma } from '@prisma/client';
 import { IBookingFilterableFields } from './booking.interface';
 import { bookingSearchableFields } from './booking.constant';
+import ApiError from '../../../error/ApiError';
+import httpStatus from 'http-status';
 const create = async (payload: any): Promise<Booking> => {
+  if (payload?.bookingItems?.length < 1) {
+    throw new ApiError(
+      httpStatus.NOT_ACCEPTABLE,
+      'Add at least one booking item in your cart'
+    );
+  }
   const cartIds = payload?.bookingItems?.map((booking: any) => booking?.cartId);
   const result = await prisma.$transaction(async ts => {
     const bookingCreate = await ts.booking.create({
@@ -67,6 +75,9 @@ const getAll = async (
 
   const result = await prisma.booking.findMany({
     where: whereConditions,
+    include: {
+      user: true,
+    },
     orderBy,
     skip,
     take: limit,
@@ -88,6 +99,9 @@ const getSingle = async (id: string): Promise<Booking | null> => {
   const result = await prisma.booking.findFirst({
     where: {
       id,
+    },
+    include: {
+      user: true,
     },
   });
   return result;

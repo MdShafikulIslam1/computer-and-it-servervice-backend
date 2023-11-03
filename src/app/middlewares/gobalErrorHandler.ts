@@ -1,24 +1,33 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-import { ErrorRequestHandler } from 'express';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import config from '../../config';
-import { IGenericErrorMessages } from '../../interfaces/error';
-import handleValidationError from '../../error/handleValidationError';
-import ApiError from '../../error/ApiError';
-import { errorLogger } from '../../shared/logger';
+
+import { Prisma } from '@prisma/client';
 import { ZodError } from 'zod';
+import handleValidationError from '../../error/handleValidationError';
 import handleZodError from '../../error/handleZodError';
-import handleCastError from '../../error/handleCastError';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
+import handleClientError from '../../error/handleClientError';
+import ApiError from '../../error/ApiError';
+import { IGenericErrorMessages } from '../../interfaces/error';
+
+const globalErrorHandler: ErrorRequestHandler = (
+  error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   config.env === 'development'
-    ? // eslint-disable-next-line no-console
-      console.log('globalErrorhandler', error)
-    : errorLogger.error('global error ', error);
+    ? console.log(`🐱‍🏍 globalErrorHandler ~~`, { error })
+    : null;
+
   let statusCode = 500;
-  let message = 'Something went wrong';
+  let message = 'Something went wrong !';
   let errorMessages: IGenericErrorMessages[] = [];
 
-  if (error?.name === 'ValidationError') {
+  if (error instanceof Prisma.PrismaClientValidationError) {
     const simplifiedError = handleValidationError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
@@ -28,21 +37,31 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
-  } else if (error?.name === 'CastError') {
-    const simplifiedError = handleCastError(error);
+  } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const simplifiedError = handleClientError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
   } else if (error instanceof ApiError) {
     statusCode = error?.statusCode;
-    message = error?.message;
+    message = error.message;
     errorMessages = error?.message
-      ? [{ path: '', message: error?.message }]
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
       : [];
   } else if (error instanceof Error) {
     message = error?.message;
     errorMessages = error?.message
-      ? [{ path: '', message: error?.message }]
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
       : [];
   }
 
@@ -53,4 +72,5 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     stack: config.env !== 'production' ? error?.stack : undefined,
   });
 };
+
 export default globalErrorHandler;
