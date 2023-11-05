@@ -1,6 +1,6 @@
 {
-    "version": 2,
-    "name": "computer-repair-and-it-service",
-    "builds": [{ "src": "dist/server.js", "use": "@vercel/node" }],
-    "routes": [{ "src": "/(.*)", "dest": "dist/server.js" }]
-  }
+  "version": 2,
+  "name": "computer-repair-and-it-service",
+  "builds": [{ "src": "dist/server.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "dist/server.js" }]
+}

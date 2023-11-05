@@ -21,7 +21,7 @@ model User {
   emergencyContactNo String?
   dateOfBirth        String?
   profileImage       String?
-  availability       Boolean        @default(false)
+  availability       Boolean        @default(true)
   nationality        String?
   reviewRatings      ReviewRating[]
   feedbacks          Feedback[]
