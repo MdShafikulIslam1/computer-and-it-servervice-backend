@@ -4,7 +4,15 @@ import router from './app/routes/routes';
 const app = express();
 
 //parser
-app.use(cors());
+app.use(
+  cors({
+    // origin: 'https://whats-app-clone-frontend-pi.vercel.app',
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
