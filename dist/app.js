@@ -9,8 +9,10 @@ const routes_1 = __importDefault(require("./app/routes/routes"));
 const app = (0, express_1.default)();
 //parser
 app.use((0, cors_1.default)({
-    // origin: 'https://whats-app-clone-frontend-pi.vercel.app',
-    origin: 'http://localhost:3000',
+    origin: [
+        'https://computer-it-service-frontend.vercel.app',
+        'http://localhost:3000',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
