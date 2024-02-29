@@ -5,7 +5,7 @@ const router = Router();
 
 router.post('/init', PaymentController.initPayment);
 
-router.post('/success/:tranId', PaymentController.successPayment);
+router.post('/success/:tranId/:bookingId', PaymentController.successPayment);
 
 router.post('/fail', PaymentController.failPayment);
 

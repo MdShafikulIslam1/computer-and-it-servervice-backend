@@ -1,19 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Payment, Payment_Status } from '@prisma/client';
+import { Booking_status, Payment, Payment_Status } from '@prisma/client';
 import config from '../../../config';
 import SSLCommerzPayment from 'sslcommerz-lts';
 import ApiError from '../../../error/ApiError';
 import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
+import crypto from 'crypto';
 
 const initPayment = async (payload: Payment) => {
+  const transactionId = crypto.randomBytes(5).toString('hex').toUpperCase();
+
   const data = {
     total_amount: payload.amount,
     currency: 'BDT',
-    tran_id: payload.transactionId, // use unique tran_id for each api call
-    success_url: `http://localhost:5000/api/v1/payments/success/${payload.transactionId}`,
-    fail_url: 'http://localhost:5000/api/v1/payments/fail',
-    cancel_url: 'http://localhost:5000/api/v1/payments/fail',
+    tran_id: transactionId, // use unique tran_id for each api call
+    // success_url: `http://localhost:5000/api/v1/payments/success/${transactionId}/${payload.bookingId}`,
+    // fail_url: 'http://localhost:5000/api/v1/payments/fail',
+    // cancel_url: 'http://localhost:5000/api/v1/payments/fail',
+    success_url: `https://computer-and-it-servervice-backend.vercel.app/api/v1/payments/success/${transactionId}/${payload.bookingId}`,
+    fail_url:
+      'https://computer-and-it-servervice-backend.vercel.app/api/v1/payments/fail',
+    cancel_url:
+      'https://computer-and-it-servervice-backend.vercel.app/api/v1/payments/fail',
     ipn_url: 'http://localhost:3030/ipn',
     shipping_method: 'Courier',
     product_name: 'Computer.',
@@ -40,7 +48,7 @@ const initPayment = async (payload: Payment) => {
   const sslcz = new SSLCommerzPayment(
     config.store_id,
     config.store_password,
-    false
+    true
   );
   const apiResponse = await sslcz.init(data);
   const gatewayPageURL = apiResponse.GatewayPageURL;
@@ -49,7 +57,7 @@ const initPayment = async (payload: Payment) => {
   }
   await prisma.payment.create({
     data: {
-      transactionId: payload.transactionId,
+      transactionId: transactionId,
       amount: payload.amount,
       status: Payment_Status.PENDING,
       bookingId: payload.bookingId,
@@ -58,7 +66,10 @@ const initPayment = async (payload: Payment) => {
   return gatewayPageURL;
 };
 
-const successPayment = async (tran_id: string): Promise<{ url: string }> => {
+const successPayment = async (
+  tran_id: string,
+  bookingId: string
+): Promise<{ url: string }> => {
   const isExistPayment = await prisma.payment.findFirst({
     where: {
       transactionId: tran_id,
@@ -75,6 +86,15 @@ const successPayment = async (tran_id: string): Promise<{ url: string }> => {
     },
     data: {
       status: Payment_Status.PAID,
+    },
+  });
+
+  await prisma.booking.updateMany({
+    where: {
+      id: bookingId,
+    },
+    data: {
+      status: Booking_status.PAID,
     },
   });
 

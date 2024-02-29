@@ -126,12 +126,12 @@ model Feedback {
 }
 
 model Payment {
-  id          String         @id @default(uuid())
+  id            String         @id @default(uuid())
   transactionId String
-  bookingId   String
-  booking     Booking        @relation(fields: [bookingId], references: [id])
-  status      Payment_Status @default(PENDING)
-  amount      Float          @default(0)
+  bookingId     String
+  booking       Booking        @relation(fields: [bookingId], references: [id])
+  status        Payment_Status @default(PENDING)
+  amount        Float          @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -152,6 +152,8 @@ enum User_role {
 }
 
 enum Booking_status {
+  PAID
+  PAY
   PENDING
   ACCEPT
   REJECT

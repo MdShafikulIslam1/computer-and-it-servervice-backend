@@ -14,7 +14,8 @@ const initPayment = catchAsync(async (req, res) => {
 });
 
 const successPayment = catchAsync(async (req, res) => {
-  const result = await PaymentService.successPayment(req.params.tranId);
+  const { tranId, bookingId } = req.params;
+  const result = await PaymentService.successPayment(tranId, bookingId);
   res.redirect(result.url);
 });
 
