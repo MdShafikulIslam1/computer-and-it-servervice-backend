@@ -56,7 +56,7 @@ const initPayment = (payload) => __awaiter(void 0, void 0, void 0, function* () 
         ship_postcode: 1000,
         ship_country: 'Bangladesh',
     };
-    const sslcz = new sslcommerz_lts_1.default(config_1.default.store_id, config_1.default.store_password, true);
+    const sslcz = new sslcommerz_lts_1.default(config_1.default.store_id, config_1.default.store_password, false);
     const apiResponse = yield sslcz.init(data);
     const gatewayPageURL = apiResponse.GatewayPageURL;
     if (!gatewayPageURL) {

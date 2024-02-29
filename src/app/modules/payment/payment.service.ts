@@ -48,7 +48,7 @@ const initPayment = async (payload: Payment) => {
   const sslcz = new SSLCommerzPayment(
     config.store_id,
     config.store_password,
-    true
+    false
   );
   const apiResponse = await sslcz.init(data);
   const gatewayPageURL = apiResponse.GatewayPageURL;
