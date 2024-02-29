@@ -8,7 +8,7 @@ app.use(
   cors({
     origin: [
       'https://computer-it-service-frontend.vercel.app',
-      'http://localhost:3000',
+      // 'http://localhost:3000',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
