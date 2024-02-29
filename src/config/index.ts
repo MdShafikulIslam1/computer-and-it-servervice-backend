@@ -9,6 +9,8 @@ export default {
   bcrypt_salt_number: process.env.BCRYPT_SALT_NUMBER,
   store_id: process.env.STORE_ID,
   store_password: process.env.STORE_PASSWORD,
+  frontend_deploy_link: process.env.FRONTEND_DEPLOY_LINK,
+  frontend_local_link: process.env.FRONTEND_LOCAL_LINK,
   jwt: {
     secret_key: process.env.SECRET_KEY,
     refresh_secret_key: process.env.REFRESH_SECRET_KEY,

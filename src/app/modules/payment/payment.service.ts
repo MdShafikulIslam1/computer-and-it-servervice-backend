@@ -98,13 +98,17 @@ const successPayment = async (
     },
   });
 
-  const redirectLink = `http://localhost:3000/payment/success?transactionId=${isExistPayment.transactionId}`;
+  const redirectLink = `${
+    config.frontend_deploy_link || config.frontend_local_link
+  }/payment/success?transactionId=${isExistPayment.transactionId}`;
 
   return { url: redirectLink };
 };
 
 const failPayment = async (): Promise<{ url: string }> => {
-  const redirectLink = `http://localhost:3000/payment/fail`;
+  const redirectLink = `${
+    config.frontend_deploy_link || config.frontend_local_link
+  }/payment/fail`;
 
   return { url: redirectLink };
 };

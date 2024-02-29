@@ -97,11 +97,11 @@ const successPayment = (tran_id, bookingId) => __awaiter(void 0, void 0, void 0,
             status: client_1.Booking_status.PAID,
         },
     });
-    const redirectLink = `http://localhost:3000/payment/success?transactionId=${isExistPayment.transactionId}`;
+    const redirectLink = `${config_1.default.frontend_deploy_link || config_1.default.frontend_local_link}/payment/success?transactionId=${isExistPayment.transactionId}`;
     return { url: redirectLink };
 });
 const failPayment = () => __awaiter(void 0, void 0, void 0, function* () {
-    const redirectLink = `http://localhost:3000/payment/fail`;
+    const redirectLink = `${config_1.default.frontend_deploy_link || config_1.default.frontend_local_link}/payment/fail`;
     return { url: redirectLink };
 });
 exports.PaymentService = {
