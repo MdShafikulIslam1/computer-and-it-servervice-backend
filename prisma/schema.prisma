@@ -87,7 +87,7 @@ model Booking {
   emergencyContactNo String
   additionalInfo     String?
   price              Float?
-  status             Booking_status @default(PENDING)
+  status             Booking_status @default(PAY)
   bookingItems       Json[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime?      @updatedAt

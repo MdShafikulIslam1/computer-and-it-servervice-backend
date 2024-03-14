@@ -13,7 +13,7 @@ app.use((0, cors_1.default)({
         'https://computer-it-service-frontend.vercel.app',
         'http://localhost:3000',
     ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
