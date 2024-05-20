@@ -5,7 +5,7 @@ import * as path from 'path'; // Import path module
 import config from '../config';
 import { IUploadFile } from '../interfaces/file';
 
-export const imagekit = new ImageKit({
+const imagekit = new ImageKit({
   publicKey: config.imgKit.publicKey,
   privateKey: config.imgKit.privateKey,
   urlEndpoint: config.imgKit.urlEndpoint,

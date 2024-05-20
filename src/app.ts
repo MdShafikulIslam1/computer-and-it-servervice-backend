@@ -6,10 +6,7 @@ const app = express();
 //parser
 app.use(
   cors({
-    origin: [
-      'https://computer-it-service-frontend.vercel.app',
-      'http://localhost:3000',
-    ],
+    origin: ['https://computer-it-service-frontend.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

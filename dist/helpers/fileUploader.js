@@ -35,13 +35,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileUploaderService = exports.imagekit = void 0;
+exports.FileUploaderService = void 0;
 const fs = __importStar(require("fs")); // Import fs module
 const imagekit_1 = __importDefault(require("imagekit"));
 const multer_1 = __importDefault(require("multer"));
 const path = __importStar(require("path")); // Import path module
 const config_1 = __importDefault(require("../config"));
-exports.imagekit = new imagekit_1.default({
+const imagekit = new imagekit_1.default({
     publicKey: config_1.default.imgKit.publicKey,
     privateKey: config_1.default.imgKit.privateKey,
     urlEndpoint: config_1.default.imgKit.urlEndpoint,
@@ -63,7 +63,7 @@ const fileUploadToImageKit = (file) => __awaiter(void 0, void 0, void 0, functio
         // Normalize and replace backslashes
         // Read the file content
         const fileContent = fs.readFileSync(normalizedPath);
-        exports.imagekit.upload({
+        imagekit.upload({
             file: fileContent, // Pass the file content
             fileName: file.originalname, // required
             tags: ['tag1', 'tag2'],

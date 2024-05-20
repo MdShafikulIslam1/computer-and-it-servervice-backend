@@ -9,10 +9,7 @@ const routes_1 = __importDefault(require("./app/routes/routes"));
 const app = (0, express_1.default)();
 //parser
 app.use((0, cors_1.default)({
-    origin: [
-        'https://computer-it-service-frontend.vercel.app',
-        'http://localhost:3000',
-    ],
+    origin: ['https://computer-it-service-frontend.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
