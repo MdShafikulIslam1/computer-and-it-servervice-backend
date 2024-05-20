@@ -24,13 +24,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServicesItemService = void 0;
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const fileUploader_1 = require("../../../helpers/fileUploader");
 const paginationHelpers_1 = require("../../../helpers/paginationHelpers");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const service_constant_1 = require("./service.constant");
-const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const create = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const file = req.file;
+    const uploadedImage = (yield fileUploader_1.FileUploaderService.fileUploadToImageKit(file));
+    const serviceData = Object.assign({ imageUrl: uploadedImage.url }, req.body);
     const result = yield prisma_1.default.service.create({
-        data: payload,
+        data: serviceData,
     });
     return result;
 });

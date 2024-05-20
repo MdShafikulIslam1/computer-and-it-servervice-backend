@@ -22,4 +22,9 @@ exports.default = {
         expires_in_secret_key: process.env.EXPIRES_IN_SECRET_KEY,
         expires_in_refresh_key: process.env.EXPIRES_IN_REFRESH_KEY,
     },
+    imgKit: {
+        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+        privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+        urlEndpoint: process.env.IMAGEKIT_END_POINT,
+    },
 };

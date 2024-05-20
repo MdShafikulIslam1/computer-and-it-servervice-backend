@@ -17,4 +17,9 @@ export default {
     expires_in_secret_key: process.env.EXPIRES_IN_SECRET_KEY,
     expires_in_refresh_key: process.env.EXPIRES_IN_REFRESH_KEY,
   },
+  imgKit: {
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY as string,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string,
+    urlEndpoint: process.env.IMAGEKIT_END_POINT as string,
+  },
 };

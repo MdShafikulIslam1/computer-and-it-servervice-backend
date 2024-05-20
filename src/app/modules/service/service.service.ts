@@ -1,15 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma, Service } from '@prisma/client';
+import { FileUploaderService } from '../../../helpers/fileUploader';
 import { paginationHelpers } from '../../../helpers/paginationHelpers';
 import { IGenericResponse } from '../../../interfaces/common';
+import { ImageKitFile, IUploadFile } from '../../../interfaces/file';
 import { IPaginationOptions } from '../../../interfaces/paginationOptions';
 import prisma from '../../../shared/prisma';
-import { Service, Prisma } from '@prisma/client';
-import { IServiceFilterableFields } from './service.interface';
 import { serviceSearchableFields } from './service.constant';
+import { IServiceFilterableFields } from './service.interface';
 
-const create = async (payload: Service): Promise<Service> => {
+const create = async (req: any): Promise<Service> => {
+  const file = req.file as IUploadFile;
+  const uploadedImage = (await FileUploaderService.fileUploadToImageKit(
+    file
+  )) as ImageKitFile;
+  const serviceData = {
+    imageUrl: uploadedImage.url,
+    ...req.body,
+  };
+
   const result = await prisma.service.create({
-    data: payload,
+    data: serviceData,
   });
   return result;
 };

@@ -1,7 +1,9 @@
 import express from 'express';
 import { CartController } from './cart.controller';
+import Auth from '../../middlewares/Auth';
+import { User_role } from '@prisma/client';
 const router = express.Router();
-router.post('/create-cart', CartController.create);
+router.post('/create-cart', Auth(User_role.admin), CartController.create);
 router.get('/', CartController.getAll);
 router.get('/:id', CartController.getSingle);
 router.delete('/:id', CartController.deleteOne);

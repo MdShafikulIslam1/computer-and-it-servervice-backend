@@ -17,6 +17,7 @@ const Auth =
         token,
         config.jwt.secret_key as Secret
       );
+
       if (!verifiedToken) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized User');
       }

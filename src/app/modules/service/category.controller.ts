@@ -1,13 +1,13 @@
 import httpStatus from 'http-status';
-import catchAsync from '../../../shared/catchAsync';
-import sendResponse from '../../../shared/sendResponse';
-import { ServicesItemService } from './service.service';
-import pick from '../../../shared/pick';
 import { paginationOptionFields } from '../../../common/paginationOptions';
+import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
+import sendResponse from '../../../shared/sendResponse';
 import { serviceFilterableFields } from './service.constant';
+import { ServicesItemService } from './service.service';
 
 const create = catchAsync(async (req, res) => {
-  const result = await ServicesItemService.create(req.body);
+  const result = await ServicesItemService.create(req);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
